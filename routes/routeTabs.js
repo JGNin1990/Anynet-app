@@ -5,6 +5,7 @@ import Info from '../screens/Info/Info';
 import Lists from '../screens/lists/Lists';
 import Ant from 'react-native-vector-icons/AntDesign';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import InfoStack from './infoStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -57,7 +58,7 @@ function MyTabs() {
       />
       <Tab.Screen
         name="Info"
-        component={Info}
+        component={InfoStack}
         options={{
           headerShown: false,
           tabBarLabel: 'Info',

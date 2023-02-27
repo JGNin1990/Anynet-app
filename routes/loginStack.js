@@ -1,4 +1,5 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import ForgotPws from '../screens/login/ForgotPws';
 import LoginScreen from '../screens/login/Login';
 import MyTabs from './routeTabs';
 
@@ -16,6 +17,15 @@ function LoginStack() {
         component={MyTabs}
         name="Main"
         options={{headerShown: false}}
+      />
+      <Stack.Screen
+        component={ForgotPws}
+        name="ForgotPws"
+        options={{
+          headerTitle: 'Update Your Password',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {color: '#2B3467'},
+        }}
       />
     </Stack.Navigator>
   );

@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import gStyles from '../../globalStyle';
 import FAS from 'react-native-vector-icons/FontAwesome';
@@ -42,84 +43,102 @@ const Info = ({navigation}) => {
           {/* profile body */}
           <View style={styles.profileBody}>
             {/* account setting */}
-            <View style={styles.sl}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image
-                  source={require('../../asset/images/settings.png')}
-                  style={styles.sicons}
-                />
-                <Text style={{marginLeft: 10, fontSize: 16, fontWeight: '500'}}>
-                  Account Setting
-                </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('UpdateAcc')}>
+              <View style={styles.sl}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image
+                    source={require('../../asset/images/settings.png')}
+                    style={styles.sicons}
+                  />
+                  <Text
+                    style={{marginLeft: 10, fontSize: 16, fontWeight: '500'}}>
+                    Account Setting
+                  </Text>
+                </View>
+                <View>
+                  <FAS name="arrow-right" color="black" size={20} />
+                </View>
               </View>
-              <View>
-                <FAS name="arrow-right" color="black" size={20} />
-              </View>
-            </View>
+            </TouchableOpacity>
 
             {/* change password */}
-            <View style={styles.sl}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image
-                  source={require('../../asset/images/icons/key.png')}
-                  style={styles.sicons}
-                />
-                <Text style={{marginLeft: 10, fontSize: 16, fontWeight: '500'}}>
-                  Change Password
-                </Text>
+            <TouchableOpacity onPress={() => navigation.navigate('ChangePws')}>
+              <View style={styles.sl}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image
+                    source={require('../../asset/images/icons/key.png')}
+                    style={styles.sicons}
+                  />
+                  <Text
+                    style={{marginLeft: 10, fontSize: 16, fontWeight: '500'}}>
+                    Change Password
+                  </Text>
+                </View>
+                <View>
+                  <FAS name="arrow-right" color="black" size={20} />
+                </View>
               </View>
-              <View>
-                <FAS name="arrow-right" color="black" size={20} />
-              </View>
-            </View>
+            </TouchableOpacity>
 
             {/* User Gide */}
-            <View style={styles.sl}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image
-                  source={require('../../asset/images/icons/guide.png')}
-                  style={styles.sicons}
-                />
-                <Text style={{marginLeft: 10, fontSize: 16, fontWeight: '500'}}>
-                  User Guide
-                </Text>
+            <TouchableOpacity
+              onPress={() => Alert.alert('This is in maintenance')}>
+              <View style={styles.sl}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image
+                    source={require('../../asset/images/icons/guide.png')}
+                    style={styles.sicons}
+                  />
+                  <Text
+                    style={{marginLeft: 10, fontSize: 16, fontWeight: '500'}}>
+                    User Guide
+                  </Text>
+                </View>
+                <View>
+                  <FAS name="arrow-right" color="black" size={20} />
+                </View>
               </View>
-              <View>
-                <FAS name="arrow-right" color="black" size={20} />
-              </View>
-            </View>
+            </TouchableOpacity>
 
             {/* privacy policy */}
-            <View style={styles.sl}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image
-                  source={require('../../asset/images/icons/privacy.png')}
-                  style={styles.sicons}
-                />
-                <Text style={{marginLeft: 10, fontSize: 16, fontWeight: '500'}}>
-                  Privacy Policy
-                </Text>
+            <TouchableOpacity
+              onPress={() => Alert.alert('This is in maintenance')}>
+              <View style={styles.sl}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image
+                    source={require('../../asset/images/icons/privacy.png')}
+                    style={styles.sicons}
+                  />
+                  <Text
+                    style={{marginLeft: 10, fontSize: 16, fontWeight: '500'}}>
+                    Privacy Policy
+                  </Text>
+                </View>
+                <View>
+                  <FAS name="arrow-right" color="black" size={20} />
+                </View>
               </View>
-              <View>
-                <FAS name="arrow-right" color="black" size={20} />
-              </View>
-            </View>
+            </TouchableOpacity>
 
             {/* terms and conditions */}
-            <View style={styles.sl}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Image
-                  source={require('../../asset/images/icons/terms-and-conditions.png')}
-                  style={styles.sicons}
-                />
-                <Text style={{marginLeft: 10, fontSize: 16, fontWeight: '500'}}>
-                  Terms and Conditions
-                </Text>
+            <TouchableOpacity
+              onPress={() => Alert.alert('This is in maintenance')}>
+              <View style={styles.sl}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Image
+                    source={require('../../asset/images/icons/terms-and-conditions.png')}
+                    style={styles.sicons}
+                  />
+                  <Text
+                    style={{marginLeft: 10, fontSize: 16, fontWeight: '500'}}>
+                    Terms and Conditions
+                  </Text>
+                </View>
+                <View>
+                  <FAS name="arrow-right" color="black" size={20} />
+                </View>
               </View>
-              <View>
-                <FAS name="arrow-right" color="black" size={20} />
-              </View>
-            </View>
+            </TouchableOpacity>
 
             {/* logout */}
             <TouchableOpacity onPress={logoutHandle}>

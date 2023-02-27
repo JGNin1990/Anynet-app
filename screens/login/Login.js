@@ -43,7 +43,9 @@ const LoginScreen = () => {
                 Login
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{marginTop: 40}}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ForgotPws')}
+              style={{marginTop: 40}}>
               <Text
                 style={{textAlign: 'center', fontSize: 15, color: '#BAD7E9'}}>
                 Forgot password?
