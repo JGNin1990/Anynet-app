@@ -1,24 +1,31 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, TextInput, TouchableOpacity} from 'react-native';
 import stylesForAdd from './addCustomerStyles';
 import {SelectList} from 'react-native-dropdown-select-list';
 import gStyles from '../../globalStyle';
+import {useSelector} from 'react-redux';
+import {
+  useInternetPlanQuery,
+  useSeverFeeQuery,
+} from '../../store/services/Endpoints/editEndpoints';
 
 const SubPlan = () => {
-  const [selected, setSelected] = React.useState('');
+  const [selectedPlan, setSelectedPlan] = React.useState('');
   const [selected1, setSelected1] = React.useState('');
-  const [selected2, setSelected2] = React.useState('');
+  const [selectedServiceFee, setSelectedServiceFee] = React.useState('');
   const [selected3, setSelected3] = React.useState('');
-
+  const internetPlan = useInternetPlanQuery();
   // const currentDate = new Date();
-
+  const severFee = useSeverFeeQuery();
   // for plan
-  const planData = [
-    {key: '1', value: 'Basic - 18Mbps'},
-    {key: '2', value: 'Standard - 28Mbps'},
-    {key: '3', value: 'Professional - 38Mbps'},
-    {key: '4', value: 'Entertainment - 50Mbps'},
-  ];
+
+  const planDatas = internetPlan?.currentData?.data?.map(p => {
+    return {key: p.id, value: `${p.name} ( ${p.speed}Mbps )`};
+  });
+
+  // console.log(internetPlan);
+  // console.log(selectedPlan);
+  // console.log(severFee?.currentData?.data);
 
   // for months
   const monthData = [
@@ -29,7 +36,10 @@ const SubPlan = () => {
   ];
 
   // for feeData
-  const feeData = [{key: '1', value: 'Installation Charges (30000Ks)'}];
+  // const feeData = [{key: '1', value: 'Installation Charges (30000Ks)'}];
+  const feeData = severFee?.currentData?.data?.map(e => {
+    return {key: e.id, value: `${e.name} (${e.fee}Ks)`};
+  });
 
   // for payment method
   const paymentMethod = [
@@ -45,9 +55,9 @@ const SubPlan = () => {
       <View>
         <Text style={stylesForAdd.forText}>Plan Name * :</Text>
         <SelectList
-          setSelected={val => setSelected(val)}
-          data={planData}
-          save="value"
+          setSelected={val => setSelectedPlan(val)}
+          data={planDatas}
+          save="key"
           search={false}
           dropdownStyles={{backgroundColor: '#eeeeee'}}
           boxStyles={{backgroundColor: '#eeeeee', marginTop: 10}}
@@ -55,12 +65,29 @@ const SubPlan = () => {
         />
       </View>
 
+      {/* for speed */}
+      {/* <View style={stylesForAdd.forP}>
+        <Text style={stylesForAdd.forText}>Speed:</Text>
+        <TextInput
+          editable={false}
+          value={`${
+            internetPlan?.currentData?.data[selectedPlan - 1].speed
+          }Mbps`}
+          placeholder="Total Ammount is here"
+          style={stylesForAdd.forInput}
+        />
+      </View> */}
+
       {/* for ammount */}
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>Ammount * :</Text>
         <TextInput
           editable={false}
-          value="22000 Ks"
+          value={`${
+            internetPlan?.currentData?.data[selectedPlan - 1]?.price
+              ? internetPlan?.currentData?.data[selectedPlan - 1]?.price
+              : '0'
+          } Ks`}
           placeholder="Total Ammount is here"
           style={stylesForAdd.forInput}
         />
@@ -91,13 +118,13 @@ const SubPlan = () => {
         />
       </View>
 
-      {/* for month choose */}
+      {/* for serverFee */}
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>Service Fee * :</Text>
         <SelectList
-          setSelected={val => setSelected2(val)}
+          setSelected={val => setSelectedServiceFee(val)}
           data={feeData}
-          save="value"
+          save="key"
           search={false}
           dropdownStyles={{backgroundColor: '#eeeeee'}}
           boxStyles={{backgroundColor: '#eeeeee', marginTop: 10}}

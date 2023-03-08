@@ -4,11 +4,21 @@ import stylesForAdd from './addCustomerStyles';
 // import Fas from 'react-native-vector-icons/FontAwesome';
 import {SelectList} from 'react-native-dropdown-select-list';
 import DocumentPicker from 'react-native-document-picker';
+import {useSelector} from 'react-redux';
+import {
+  useCitiesQuery,
+  useSaleRepQuery,
+  useTownshipQuery,
+} from '../../store/services/Endpoints/editEndpoints';
 
 const PersonalInfo = () => {
-  const [selected, setSelected] = React.useState('');
+  const [selectedCity, setSelectedCity] = React.useState('');
   const [selected2, setSelected2] = React.useState('');
   const [selected3, setSelected3] = React.useState('');
+  const [selectedSaleRep, setSelectedSaleRap] = React.useState('');
+
+  const saleRep = useSaleRepQuery();
+
   const [faceImg, setFaceImg] = useState({
     url: null,
     name: null,
@@ -19,6 +29,11 @@ const PersonalInfo = () => {
     backUrl: null,
     backName: null,
   });
+
+  const citiesData = useSelector(state => state.cities);
+  const townshipsData = useTownshipQuery(
+    `${citiesData[selectedCity - 1]?.code}`,
+  );
 
   // for photo upload
   const pickFaceImg = async () => {
@@ -65,19 +80,20 @@ const PersonalInfo = () => {
   };
 
   // for city
-  const cityData = [
-    {key: '1', value: 'Yangon'},
-    {key: '2', value: 'Mandalay'},
-  ];
+  // const cityData = [
+  //   {key: '1', value: 'Yangon'},
+  //   {key: '2', value: 'Mandalay'},
+  // ];
+  const cities = citiesData?.map(p => {
+    return {key: p.id, value: p.eng_name};
+  });
 
   // for township
-  const township = [
-    {key: '1', value: 'South Dagon'},
-    {key: '2', value: 'North Dagon'},
-    {key: '3', value: 'South Okkalapa'},
-    {key: '4', value: 'Hlaing'},
-    {key: '5', value: 'Thanlyin'},
-  ];
+
+  const townships = townshipsData?.currentData?.data?.map(e => {
+    return {key: e.id, value: e.eng_name};
+  });
+  // console.log(townshipsData.isSuccess, townshipsData.currentData.data);
 
   // for about us
   const aboutUs = [
@@ -88,7 +104,13 @@ const PersonalInfo = () => {
     {key: '5', value: 'Other'},
   ];
 
+  const saleRepDatas = saleRep?.currentData?.data?.map(e => {
+    return {key: e.id, value: e.name};
+  });
+
   // console.log(faceImgName);
+  // console.log(citiesData[selectedCity - 1]);
+  // console.log(selectedCity);
 
   return (
     <View style={stylesForAdd.formContainer}>
@@ -255,13 +277,13 @@ const PersonalInfo = () => {
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>City * :</Text>
         <SelectList
-          setSelected={val => setSelected(val)}
-          data={cityData}
-          save="value"
+          setSelected={val => setSelectedCity(val)}
+          data={cities}
+          save="key"
           // search={false}
           dropdownStyles={{backgroundColor: '#eeeeee'}}
           boxStyles={{backgroundColor: '#eeeeee', marginTop: 10}}
-          defaultOption={{key: '1', value: 'Yangon'}}
+          // defaultOption={{key: '2', value: 'Yangon'}}
         />
       </View>
 
@@ -270,7 +292,7 @@ const PersonalInfo = () => {
         <Text style={stylesForAdd.forText}>Township * :</Text>
         <SelectList
           setSelected={val => setSelected2(val)}
-          data={township}
+          data={townships}
           save="value"
           // search={false}
           dropdownStyles={{backgroundColor: '#eeeeee'}}
@@ -327,7 +349,15 @@ const PersonalInfo = () => {
       {/* for sale rep name */}
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>Sale Rep Name * :</Text>
-        <TextInput placeholder="Sale Rep Name" style={stylesForAdd.forInput} />
+        <SelectList
+          setSelected={val => setSelectedSaleRap(val)}
+          data={saleRepDatas}
+          save="key"
+          search={false}
+          dropdownStyles={{backgroundColor: '#eeeeee'}}
+          boxStyles={{backgroundColor: '#eeeeee', marginTop: 10}}
+          // defaultOption={{key: '1', value: 'Social Media'}}
+        />
       </View>
 
       {/* for copyright */}
