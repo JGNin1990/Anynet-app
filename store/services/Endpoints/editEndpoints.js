@@ -21,6 +21,9 @@ const editEndpoints = APIservice.injectEndpoints({
     saleRep: builder.query({
       query: () => 'get_sale_rep',
     }),
+    paymentMethod: builder.query({
+      query: () => 'all_paymentmethod',
+    }),
   }),
 });
 
@@ -30,4 +33,5 @@ export const {
   useTownshipQuery,
   useSeverFeeQuery,
   useSaleRepQuery,
+  usePaymentMethodQuery,
 } = editEndpoints;

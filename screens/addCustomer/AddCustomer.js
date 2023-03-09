@@ -40,7 +40,9 @@ const AddCustomer = ({navigation}) => {
           {/* two forms */}
           <View>
             {/* for personal information */}
-            {actNav.information && <PersonalInfo />}
+            {actNav.information && (
+              <PersonalInfo actNav={actNav} setActNav={setActNav} />
+            )}
             {actNav.subscription && <SubPlan />}
           </View>
         </ScrollView>

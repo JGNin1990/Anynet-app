@@ -1,23 +1,40 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {View, Text, Image, TextInput, TouchableOpacity} from 'react-native';
 import stylesForAdd from './addCustomerStyles';
-// import Fas from 'react-native-vector-icons/FontAwesome';
 import {SelectList} from 'react-native-dropdown-select-list';
 import DocumentPicker from 'react-native-document-picker';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   useCitiesQuery,
   useSaleRepQuery,
   useTownshipQuery,
 } from '../../store/services/Endpoints/editEndpoints';
+import gStyles from '../../globalStyle';
+import FAS from 'react-native-vector-icons/FontAwesome';
+import {addCustomerDatas} from '../../store/slicers/customerDataSlicer';
 
-const PersonalInfo = () => {
+const PersonalInfo = ({actNav, setActNav}) => {
   const [selectedCity, setSelectedCity] = React.useState('');
-  const [selected2, setSelected2] = React.useState('');
-  const [selected3, setSelected3] = React.useState('');
+  const [selectedTownship, setSelectedTwonship] = React.useState('');
+  const [selectedAbout, setSelectedAbout] = React.useState('');
   const [selectedSaleRep, setSelectedSaleRap] = React.useState('');
+  const [selectedBestTime, setSelectedbestTime] = React.useState('');
+  const [selectedBestDay, setSelectedbestDay] = React.useState('');
 
+  const [nrcNo, setNrcNo] = useState();
+  const [firstName, setFirstName] = useState();
+  const [lastName, setLastName] = useState();
+  const [phone, setPhone] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [address, setAddress] = useState();
+  const [streetAddress, setStreetAddress] = useState();
+  const [streetAddress2, setStreetAddress2] = useState();
+  const [postalCode, setPostalCode] = useState();
+
+  const dispatch = useDispatch();
   const saleRep = useSaleRepQuery();
+  const formRef = useRef();
 
   const [faceImg, setFaceImg] = useState({
     url: null,
@@ -35,6 +52,7 @@ const PersonalInfo = () => {
     `${citiesData[selectedCity - 1]?.code}`,
   );
 
+  // console.log(citiesData[selectedCity]);
   // for photo upload
   const pickFaceImg = async () => {
     try {
@@ -91,9 +109,48 @@ const PersonalInfo = () => {
   // for township
 
   const townships = townshipsData?.currentData?.data?.map(e => {
-    return {key: e.id, value: e.eng_name};
+    return {key: e.code, value: e.eng_name};
   });
   // console.log(townshipsData.isSuccess, townshipsData.currentData.data);
+
+  // for best time
+  const bestDay = [
+    {key: '1', value: 'Sunday'},
+    {key: '2', value: 'Monday'},
+    {key: '3', value: 'Tuesday'},
+    {key: '4', value: 'Wednesday'},
+    {key: '5', value: 'Thursday'},
+    {key: '6', value: 'Friday'},
+    {key: '7', value: 'Saturaday'},
+  ];
+
+  // for best time
+  const bestTime = [
+    {key: '1', value: '01:00 AM'},
+    {key: '2', value: '02:00 AM'},
+    {key: '3', value: '03:00 AM'},
+    {key: '4', value: '04:00 AM'},
+    {key: '5', value: '05:00 AM'},
+    {key: '6', value: '06:00 AM'},
+    {key: '7', value: '07:00 AM'},
+    {key: '8', value: '08:00 AM'},
+    {key: '9', value: '09:00 AM'},
+    {key: '10', value: '10:00 AM'},
+    {key: '11', value: '11:00 AM'},
+    {key: '12', value: '12:00 AM'},
+    {key: '13', value: '01:00 PM'},
+    {key: '14', value: '02:00 PM'},
+    {key: '15', value: '03:00 PM'},
+    {key: '16', value: '04:00 PM'},
+    {key: '17', value: '05:00 PM'},
+    {key: '18', value: '06:00 PM'},
+    {key: '19', value: '07:00 PM'},
+    {key: '20', value: '08:00 PM'},
+    {key: '21', value: '09:00 PM'},
+    {key: '22', value: '10:00 PM'},
+    {key: '23', value: '11:00 PM'},
+    {key: '24', value: '12:00 PM'},
+  ];
 
   // for about us
   const aboutUs = [
@@ -108,8 +165,38 @@ const PersonalInfo = () => {
     return {key: e.id, value: e.name};
   });
 
+  const handleNextBtn = () => {
+    const personalInfoDatas = {
+      mainImage: faceImg.name,
+      nrcNo,
+      firstName,
+      lastName,
+      nrcFront: nrc.frontName,
+      nrcBack: nrc.backName,
+      phone,
+      email,
+      password,
+      address,
+      streetAddress,
+      streetAddress2,
+      cityName: citiesData[selectedCity - 1]?.code,
+      townshipName: selectedTownship,
+      postalCode,
+      selectedBestTime,
+      selectedBestDay,
+      selectedAbout,
+      selectedSaleRep,
+    };
+    // console.log(personalInfoDatas);
+    dispatch(addCustomerDatas(personalInfoDatas));
+    setActNav(pre => ({...pre, information: false, subscription: true}));
+  };
+
+  // console.log(faceImg.url);
   // console.log(faceImgName);
   // console.log(citiesData[selectedCity - 1]);
+  // console.log(selectedCity);
+  // console.log(nrcNo);
   // console.log(selectedCity);
 
   return (
@@ -145,6 +232,8 @@ const PersonalInfo = () => {
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>NRC * :</Text>
         <TextInput
+          onChangeText={e => setNrcNo(e)}
+          value={nrcNo}
           placeholder="12/PAZATA(N)000000"
           style={stylesForAdd.forInput}
         />
@@ -154,6 +243,8 @@ const PersonalInfo = () => {
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>First Name * :</Text>
         <TextInput
+          onChangeText={e => setFirstName(e)}
+          value={firstName}
           placeholder="Enter your first name"
           style={stylesForAdd.forInput}
         />
@@ -163,6 +254,8 @@ const PersonalInfo = () => {
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>Last Name * :</Text>
         <TextInput
+          onChangeText={e => setLastName(e)}
+          value={lastName}
           placeholder="Enter your last name"
           style={stylesForAdd.forInput}
         />
@@ -226,6 +319,8 @@ const PersonalInfo = () => {
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>Phone Number * :</Text>
         <TextInput
+          onChangeText={e => setPhone(e)}
+          value={phone}
           placeholder="Enter your phone number"
           style={stylesForAdd.forInput}
         />
@@ -235,6 +330,8 @@ const PersonalInfo = () => {
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>E-mail * :</Text>
         <TextInput
+          onChangeText={e => setEmail(e)}
+          value={email}
           placeholder="Enter your email"
           style={stylesForAdd.forInput}
         />
@@ -243,13 +340,20 @@ const PersonalInfo = () => {
       {/* for password */}
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>Password * :</Text>
-        <TextInput placeholder="Password" style={stylesForAdd.forInput} />
+        <TextInput
+          onChangeText={e => setPassword(e)}
+          value={password}
+          placeholder="Password"
+          style={stylesForAdd.forInput}
+        />
       </View>
 
       {/* for address */}
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>Address * :</Text>
         <TextInput
+          onChangeText={e => setAddress(e)}
+          value={address}
           placeholder="Enter your address"
           style={stylesForAdd.forInput}
         />
@@ -259,6 +363,8 @@ const PersonalInfo = () => {
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>Street Address :</Text>
         <TextInput
+          onChangeText={e => setStreetAddress(e)}
+          value={streetAddress}
           placeholder="Enter your street address"
           style={stylesForAdd.forInput}
         />
@@ -268,6 +374,8 @@ const PersonalInfo = () => {
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>Street Address Line 2 :</Text>
         <TextInput
+          onChangeText={e => setStreetAddress2(e)}
+          value={streetAddress2}
           placeholder="Enter your street address line 2"
           style={stylesForAdd.forInput}
         />
@@ -280,7 +388,7 @@ const PersonalInfo = () => {
           setSelected={val => setSelectedCity(val)}
           data={cities}
           save="key"
-          // search={false}
+          search={false}
           dropdownStyles={{backgroundColor: '#eeeeee'}}
           boxStyles={{backgroundColor: '#eeeeee', marginTop: 10}}
           // defaultOption={{key: '2', value: 'Yangon'}}
@@ -291,13 +399,13 @@ const PersonalInfo = () => {
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>Township * :</Text>
         <SelectList
-          setSelected={val => setSelected2(val)}
+          setSelected={val => setSelectedTwonship(val)}
           data={townships}
-          save="value"
-          // search={false}
+          save="key"
+          search={false}
           dropdownStyles={{backgroundColor: '#eeeeee'}}
           boxStyles={{backgroundColor: '#eeeeee', marginTop: 10}}
-          defaultOption={{key: '1', value: 'South Dagon'}}
+          defaultOption={{value: 'Select township'}}
         />
       </View>
 
@@ -305,6 +413,8 @@ const PersonalInfo = () => {
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>Postal code :</Text>
         <TextInput
+          onChangeText={e => setPostalCode(e)}
+          value={postalCode}
           placeholder="Enter your postal code"
           style={stylesForAdd.forInput}
         />
@@ -315,9 +425,14 @@ const PersonalInfo = () => {
         <Text style={stylesForAdd.forText}>
           Best Day of Week to be Reached :
         </Text>
-        <TextInput
-          placeholder="Best Day of Week to be Reached "
-          style={stylesForAdd.forInput}
+        <SelectList
+          setSelected={val => setSelectedbestDay(val)}
+          data={bestDay}
+          save="value"
+          search={true}
+          dropdownStyles={{backgroundColor: '#eeeeee'}}
+          boxStyles={{backgroundColor: '#eeeeee', marginTop: 10}}
+          defaultOption={{value: 'Best Time of Day to be Reached'}}
         />
       </View>
 
@@ -326,9 +441,14 @@ const PersonalInfo = () => {
         <Text style={stylesForAdd.forText}>
           Best Time of Day to be Reached :
         </Text>
-        <TextInput
-          placeholder="Best Time of Day to be Reached"
-          style={stylesForAdd.forInput}
+        <SelectList
+          setSelected={val => setSelectedbestTime(val)}
+          data={bestTime}
+          save="value"
+          search={true}
+          dropdownStyles={{backgroundColor: '#eeeeee'}}
+          boxStyles={{backgroundColor: '#eeeeee', marginTop: 10}}
+          defaultOption={{value: 'Best Time of Day to be Reached'}}
         />
       </View>
 
@@ -336,7 +456,7 @@ const PersonalInfo = () => {
       <View style={stylesForAdd.forP}>
         <Text style={stylesForAdd.forText}>What do you hear about us? :</Text>
         <SelectList
-          setSelected={val => setSelected3(val)}
+          setSelected={val => setSelectedAbout(val)}
           data={aboutUs}
           save="value"
           search={false}
@@ -358,6 +478,30 @@ const PersonalInfo = () => {
           boxStyles={{backgroundColor: '#eeeeee', marginTop: 10}}
           // defaultOption={{key: '1', value: 'Social Media'}}
         />
+      </View>
+
+      {/* next btn */}
+      <View style={stylesForAdd.forP}>
+        <TouchableOpacity onPress={handleNextBtn}>
+          <View
+            style={[
+              gStyles.smallBtn,
+              {
+                backgroundColor: '#2B3467',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              },
+            ]}>
+            <Text style={{fontSize: 17, fontWeight: 500, color: 'white'}}>
+              Next{' '}
+            </Text>
+
+            <View style={{marginLeft: 10}}>
+              <FAS name="arrow-right" color="white" size={20} />
+            </View>
+          </View>
+        </TouchableOpacity>
       </View>
 
       {/* for copyright */}
